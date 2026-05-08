@@ -1,38 +1,42 @@
-import torch
-from transformers import DistilBertTokenizerFast, DistilBertForSequenceClassification
+from pathlib import Path
 
-MODEL_PATH = "app/ml_models/email_phishing_distilbert"
-
-tokenizer = DistilBertTokenizerFast.from_pretrained(MODEL_PATH)
-model = DistilBertForSequenceClassification.from_pretrained(MODEL_PATH)
-
-device = "cuda" if torch.cuda.is_available() else "cpu"
-model.to(device)
-model.eval()
+MODEL_PATH = Path("app/ml_models/email_phishing_distilbert")
 
 
-def predict_email_phishing(text: str):
+def predict_email_phishing(text: str) -> dict:
+    if not MODEL_PATH.exists():
+        return {
+            "label": "unknown",
+            "confidence": 0.0,
+            "model_available": False,
+            "note": "Email ML model is not available in deployment. Using rule-based analysis only.",
+        }
+
+    from transformers import DistilBertTokenizerFast, DistilBertForSequenceClassification
+    import torch
+
+    tokenizer = DistilBertTokenizerFast.from_pretrained(str(MODEL_PATH))
+    model = DistilBertForSequenceClassification.from_pretrained(str(MODEL_PATH))
+    model.eval()
+
     inputs = tokenizer(
         text,
         return_tensors="pt",
         truncation=True,
         padding=True,
-        max_length=256,
+        max_length=512,
     )
-
-    inputs = {key: value.to(device) for key, value in inputs.items()}
 
     with torch.no_grad():
         outputs = model(**inputs)
-        probs = torch.softmax(outputs.logits, dim=1)[0]
+        probs = torch.softmax(outputs.logits, dim=1)
+        predicted_class = torch.argmax(probs, dim=1).item()
+        confidence = probs[0][predicted_class].item()
 
-    safe_confidence = float(probs[0])
-    phishing_confidence = float(probs[1])
-
-    prediction = "Phishing Email" if phishing_confidence >= safe_confidence else "Safe Email"
+    label = "phishing" if predicted_class == 1 else "safe"
 
     return {
-        "prediction": prediction,
-        "safe_confidence": round(safe_confidence, 4),
-        "phishing_confidence": round(phishing_confidence, 4),
+        "label": label,
+        "confidence": confidence,
+        "model_available": True,
     }
