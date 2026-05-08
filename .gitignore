@@ -1,0 +1,70 @@
+# =========================
+# Python / Backend
+# =========================
+
+backend/venv/
+backend/__pycache__/
+backend/**/*.pyc
+backend/.env
+
+# Alembic
+backend/alembic/versions/__pycache__/
+
+# ML / AI
+backend/ml_models/
+backend/training_outputs/
+backend/datasets/
+backend/data/
+backend/models/
+backend/checkpoints/
+
+# Model files
+*.bin
+*.pt
+*.pth
+*.safetensors
+
+# Logs
+*.log
+
+# =========================
+# Frontend / React
+# =========================
+
+frontend/node_modules/
+frontend/dist/
+frontend/.env
+
+# =========================
+# VS Code / IDE
+# =========================
+
+.vscode/
+.idea/
+
+# =========================
+# OS files
+# =========================
+
+.DS_Store
+Thumbs.db
+
+# =========================
+# Testing / Cache
+# =========================
+
+.pytest_cache/
+.coverage
+htmlcov/
+.ipynb_checkpoints/
+
+# =========================
+# Build
+# =========================
+
+build/
+dist/
+
+backend/app/ml_models/
+backend/app/ml_models/**
+

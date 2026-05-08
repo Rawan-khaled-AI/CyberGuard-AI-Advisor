@@ -1,0 +1,19 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: cyberguard-postgres
+    restart: always
+
+    environment:
+      POSTGRES_USER: cyberguard_user
+      POSTGRES_PASSWORD: cyberguard_password
+      POSTGRES_DB: cyberguard_db
+
+    ports:
+      - "5432:5432"
+
+    volumes:
+      - cyberguard_postgres_data:/var/lib/postgresql/data
+
+volumes:
+  cyberguard_postgres_data:
