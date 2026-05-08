@@ -3,7 +3,7 @@ import axios from "axios";
 import { Shield, Send, CheckCircle, Bot, User, AlertTriangle } from "lucide-react";
 import "./App.css";
 
-const API_URL = "http://127.0.0.1:8000";
+const API_URL = "https://cyberguard-ai-advisor-production.up.railway.app";
 
 function RiskBadge({ risk }) {
   if (!risk) return null;
