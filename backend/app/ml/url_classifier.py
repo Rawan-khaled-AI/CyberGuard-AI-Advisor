@@ -1,25 +1,31 @@
+from pathlib import Path
 import joblib
-import pandas as pd
 
-from app.ml.url_feature_extractor import FEATURE_COLUMNS, extract_url_features
+MODEL_PATH = Path("app/ml_models/url_model.pkl")
 
-MODEL_PATH = "app/ml_models/url_model.pkl"
+model = None
 
-model = joblib.load(MODEL_PATH)
+if MODEL_PATH.exists():
+    model = joblib.load(MODEL_PATH)
 
 
-def predict_url_risk(url: str) -> dict:
-    features = extract_url_features(url)
-    x = pd.DataFrame([features], columns=FEATURE_COLUMNS)
+def predict_url_risk(features: dict) -> dict:
+    if model is None:
+        return {
+            "prediction": "unknown",
+            "confidence": 0.0,
+            "model_available": False,
+            "note": "URL ML model is not available in deployment. Using rule-based analysis only.",
+        }
 
-    prediction = int(model.predict(x)[0])
-    probabilities = model.predict_proba(x)[0]
+    feature_values = [list(features.values())]
 
-    legitimate_confidence = float(probabilities[0])
-    phishing_confidence = float(probabilities[1])
+    prediction = model.predict(feature_values)[0]
+
+    confidence = 1.0
 
     return {
-        "prediction": "Phishing URL" if prediction == 1 else "Legitimate URL",
-        "legitimate_confidence": round(legitimate_confidence, 4),
-        "phishing_confidence": round(phishing_confidence, 4),
+        "prediction": prediction,
+        "confidence": confidence,
+        "model_available": True,
     }
