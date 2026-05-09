@@ -30,11 +30,12 @@ def predict_url_risk(features: dict) -> dict:
         }
 
     expected_features = list(features.values())[:20]
+
     feature_values = [expected_features]
 
-    prediction = model.predict(feature_values)[0]
+    prediction = str(model.predict(feature_values)[0])
 
-    confidence = 1.0
+    confidence = float(1.0)
 
     return {
         "prediction": prediction,
@@ -42,3 +43,4 @@ def predict_url_risk(features: dict) -> dict:
         "model_available": True,
         "source": "huggingface",
     }
+}
