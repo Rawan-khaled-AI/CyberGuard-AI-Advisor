@@ -112,9 +112,11 @@ def handle_chat_message(
 
     if url:
         rule_result = analyze_url(url)
-        model_result = predict_url_risk(url)
-        final_decision = combine_url_risk(rule_result, model_result)
+        from app.ml.url_feature_extractor import extract_url_features
 
+        features = extract_url_features(url)
+        model_result = predict_url_risk(features)
+        final_decision = combine_url_risk(rule_result, model_result)
         return {
             "type": "url_analysis",
             "detected_url": url,
