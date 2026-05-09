@@ -235,9 +235,8 @@ def answer_with_rag(question: str) -> dict:
             "answer": (
                 "لا أقدر أساعد في أي استخدام هجومي أو ضار للأمن السيبراني. "
                 "أقدر أساعدك في الحماية، التوعية، اكتشاف المخاطر، والاستجابة الآمنة للحوادث."
-                if any("\u0600" <= ch <= "\u06FF" for ch in question)
-                else
-                "I can’t help with harmful or offensive cybersecurity actions. "
+                if any("\u0600" <= ch <= "\u06ff" for ch in question)
+                else "I can’t help with harmful or offensive cybersecurity actions. "
                 "I can help with defensive security, awareness, prevention, detection, and safe incident response."
             ),
             "device": device,
