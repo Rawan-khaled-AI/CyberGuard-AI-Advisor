@@ -33,7 +33,9 @@ def predict_url_risk(features: dict) -> dict:
 
     feature_values = [expected_features]
 
-    prediction = str(model.predict(feature_values)[0])
+    raw_prediction = int(model.predict(feature_values)[0])
+
+    prediction = "phishing" if raw_prediction == 1 else "safe"
 
     confidence = float(1.0)
 
@@ -43,3 +45,4 @@ def predict_url_risk(features: dict) -> dict:
         "model_available": True,
         "source": "huggingface",
     }
+    
