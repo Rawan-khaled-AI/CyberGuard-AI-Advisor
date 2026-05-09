@@ -43,4 +43,3 @@ def predict_url_risk(features: dict) -> dict:
         "model_available": True,
         "source": "huggingface",
     }
-}
