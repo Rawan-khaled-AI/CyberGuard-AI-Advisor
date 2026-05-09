@@ -31,7 +31,9 @@ def is_email_analysis_request(text: str) -> bool:
     return any(signal in lowered for signal in email_signals)
 
 
-def build_contextual_message(message: str, conversation_context: str | None = None) -> str:
+def build_contextual_message(
+    message: str, conversation_context: str | None = None
+) -> str:
     if not conversation_context:
         return message
 
