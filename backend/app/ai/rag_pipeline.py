@@ -3,7 +3,6 @@ import os
 import requests
 
 import faiss
-import numpy as np
 import torch
 from dotenv import load_dotenv
 from sentence_transformers import SentenceTransformer
@@ -24,6 +23,13 @@ embedding_model = SentenceTransformer(
 
 chunks = []
 index = None
+
+
+def detect_language(text: str) -> str:
+    arabic_chars = sum(1 for ch in text if "\u0600" <= ch <= "\u06ff")
+    english_chars = sum(1 for ch in text if ch.isascii() and ch.isalpha())
+
+    return "arabic" if arabic_chars > english_chars else "english"
 
 
 def load_knowledge_base():
@@ -87,21 +93,22 @@ def is_unsafe_question(question: str) -> bool:
 
 
 def build_prompt(question: str, context: str) -> str:
+    user_language = detect_language(question)
+
+    language_rule = (
+        "The user wrote in Arabic. Reply ONLY in natural clear Arabic. Do not use English."
+        if user_language == "arabic"
+        else "The user wrote in English. Reply ONLY in English. Do not use Arabic."
+    )
+
     return f"""
 You are CyberGuard AI Advisor, a professional defensive cybersecurity assistant.
 
+Critical language rule:
+{language_rule}
+
 Main goal:
 Give short, practical, safe cybersecurity guidance like a real chat assistant.
-
-Language:
-- VERY IMPORTANT:
-- Detect the language of the user's message.
-- Reply ONLY in that same language.
-- If the user writes Arabic, answer ONLY in Arabic.
-- If the user writes English, answer ONLY in English.
-- Never switch languages.
-- Never translate unless the user asks.
-- Never mix Arabic and English unless the user mixes them first.
 
 Safety:
 - Defensive cybersecurity only.
@@ -121,33 +128,11 @@ Style:
 - Avoid unnecessary section titles.
 - Sound practical, calm, and human.
 
-Arabic style:
-- Use natural Arabic.
-- Avoid awkward phrases.
-- Say "افصل الإنترنت مؤقتًا" not "ارفع الإنترنت" or "اقفز الإنترنت".
-- Say "نصيحة أخيرة" if needed.
-- Say "مؤشرات الخطر" if needed.
-
 Cybersecurity context:
 {context}
 
 User question:
 {question}
-
-For incident response questions like clicking a suspicious link, answer like this style:
-ضغطك على لينك مشبوه ممكن يعرّض بياناتك أو جهازك للخطر، لكن تقدر تقلل الضرر بسرعة لو اتصرفت صح:
-
-1. متفتحش اللينك تاني.
-2. لو دخلت باسورد أو حمّلت ملف، افصل الإنترنت مؤقتًا.
-3. غيّر كلمات المرور المهمة من جهاز موثوق.
-4. فعّل المصادقة متعددة العوامل MFA.
-5. اعمل فحص كامل للجهاز ببرنامج حماية موثوق.
-6. لو دخلت بيانات بنكية أو بيانات حساب، تواصل مع البنك أو الدعم فورًا.
-
-For general protection questions, answer with:
-- brief explanation
-- 3 to 5 practical steps
-- one final short advice
 """
 
 
@@ -173,7 +158,7 @@ def generate_with_llm(prompt: str) -> str:
                 "content": (
                     "You are CyberGuard AI Advisor. "
                     "Give safe, defensive cybersecurity guidance only. "
-                    "Keep answers compact, practical, and in the user's language."
+                    "You must answer only in the user's language."
                 ),
             },
             {
@@ -181,7 +166,7 @@ def generate_with_llm(prompt: str) -> str:
                 "content": prompt,
             },
         ],
-        "temperature": 0.2,
+        "temperature": 0.1,
         "max_tokens": 350,
     }
 
@@ -228,6 +213,30 @@ def clean_answer(answer: str) -> str:
     return "\n".join(lines)
 
 
+def enforce_language(answer: str, question: str) -> str:
+    language = detect_language(question)
+
+    has_arabic = any("\u0600" <= ch <= "\u06ff" for ch in answer)
+    has_english = any(ch.isascii() and ch.isalpha() for ch in answer)
+
+    if language == "english" and has_arabic:
+        answer = generate_with_llm(
+            "Rewrite the following answer in English only. "
+            "Do not add new information:\n\n"
+            f"{answer}"
+        )
+        return clean_answer(answer)
+
+    if language == "arabic" and has_english:
+        answer = generate_with_llm(
+            "أعد كتابة الإجابة التالية باللغة العربية فقط بدون إضافة معلومات جديدة:\n\n"
+            f"{answer}"
+        )
+        return clean_answer(answer)
+
+    return answer
+
+
 def answer_with_rag(question: str) -> dict:
     if is_unsafe_question(question):
         return {
@@ -235,7 +244,7 @@ def answer_with_rag(question: str) -> dict:
             "answer": (
                 "لا أقدر أساعد في أي استخدام هجومي أو ضار للأمن السيبراني. "
                 "أقدر أساعدك في الحماية، التوعية، اكتشاف المخاطر، والاستجابة الآمنة للحوادث."
-                if any("\u0600" <= ch <= "\u06ff" for ch in question)
+                if detect_language(question) == "arabic"
                 else "I can’t help with harmful or offensive cybersecurity actions. "
                 "I can help with defensive security, awareness, prevention, detection, and safe incident response."
             ),
@@ -246,6 +255,7 @@ def answer_with_rag(question: str) -> dict:
     prompt = build_prompt(question, context)
     answer = generate_with_llm(prompt)
     answer = clean_answer(answer)
+    answer = enforce_language(answer, question)
 
     return {
         "type": "rag_cyber_advice",
