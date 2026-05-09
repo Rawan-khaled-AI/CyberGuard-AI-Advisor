@@ -1,12 +1,25 @@
 from pathlib import Path
 import joblib
 
-MODEL_PATH = Path("app/ml_models/url_model.pkl")
+from huggingface_hub import hf_hub_download
+
+MODEL_REPO = "rawankhaled46/cyberguard-url-model"
 
 model = None
 
-if MODEL_PATH.exists():
-    model = joblib.load(MODEL_PATH)
+try:
+    model_path = hf_hub_download(
+        repo_id=MODEL_REPO,
+        filename="url_model.pkl",
+        repo_type="model",
+    )
+
+    model = joblib.load(model_path)
+
+    print("URL model loaded from Hugging Face")
+
+except Exception as e:
+    print(f"Failed to load URL model: {e}")
 
 
 def predict_url_risk(features: dict) -> dict:
@@ -28,4 +41,5 @@ def predict_url_risk(features: dict) -> dict:
         "prediction": prediction,
         "confidence": confidence,
         "model_available": True,
+        "source": "huggingface",
     }
