@@ -1,6 +1,4 @@
-from pathlib import Path
 import joblib
-
 from huggingface_hub import hf_hub_download
 
 MODEL_REPO = "rawankhaled46/cyberguard-url-model"
@@ -31,7 +29,8 @@ def predict_url_risk(features: dict) -> dict:
             "note": "URL ML model is not available in deployment. Using rule-based analysis only.",
         }
 
-    feature_values = [list(features.values())]
+    expected_features = list(features.values())[:20]
+    feature_values = [expected_features]
 
     prediction = model.predict(feature_values)[0]
 
