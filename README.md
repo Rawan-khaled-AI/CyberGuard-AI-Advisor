@@ -1,4 +1,4 @@
-````
+````md
 # CyberGuard AI Advisor
 
 CyberGuard AI Advisor is a full-stack AI-powered cybersecurity assistant designed to help users detect phishing emails, analyze suspicious URLs, respond to security incidents, and receive defensive cybersecurity guidance in Arabic and English.
@@ -77,6 +77,7 @@ PostgreSQL Database (Neon)
  |-- Chat Sessions
  |-- Chat Messages
  |-- Security Events
+ 
 ````
 
 ---
