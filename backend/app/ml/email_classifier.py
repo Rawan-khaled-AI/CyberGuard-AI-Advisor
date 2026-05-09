@@ -1,24 +1,14 @@
-from pathlib import Path
+import torch
+from transformers import DistilBertForSequenceClassification, DistilBertTokenizerFast
 
-MODEL_PATH = Path("app/ml_models/email_phishing_distilbert")
+MODEL_NAME = "rawankhaled46/cyberguard-email-phishing-model"
+
+tokenizer = DistilBertTokenizerFast.from_pretrained(MODEL_NAME)
+model = DistilBertForSequenceClassification.from_pretrained(MODEL_NAME)
+model.eval()
 
 
 def predict_email_phishing(text: str) -> dict:
-    if not MODEL_PATH.exists():
-        return {
-            "label": "unknown",
-            "confidence": 0.0,
-            "model_available": False,
-            "note": "Email ML model is not available in deployment. Using rule-based analysis only.",
-        }
-
-    from transformers import DistilBertTokenizerFast, DistilBertForSequenceClassification
-    import torch
-
-    tokenizer = DistilBertTokenizerFast.from_pretrained(str(MODEL_PATH))
-    model = DistilBertForSequenceClassification.from_pretrained(str(MODEL_PATH))
-    model.eval()
-
     inputs = tokenizer(
         text,
         return_tensors="pt",
@@ -29,14 +19,16 @@ def predict_email_phishing(text: str) -> dict:
 
     with torch.no_grad():
         outputs = model(**inputs)
-        probs = torch.softmax(outputs.logits, dim=1)
-        predicted_class = torch.argmax(probs, dim=1).item()
-        confidence = probs[0][predicted_class].item()
+        probabilities = torch.softmax(outputs.logits, dim=1)
+        predicted_class = torch.argmax(probabilities, dim=1).item()
+        confidence = probabilities[0][predicted_class].item()
 
     label = "phishing" if predicted_class == 1 else "safe"
 
     return {
         "label": label,
+        "prediction": label,
         "confidence": confidence,
         "model_available": True,
+        "source": "huggingface",
     }
