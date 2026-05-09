@@ -3,12 +3,25 @@ from transformers import DistilBertForSequenceClassification, DistilBertTokenize
 
 MODEL_NAME = "rawankhaled46/cyberguard-email-phishing-model"
 
-tokenizer = DistilBertTokenizerFast.from_pretrained(MODEL_NAME)
-model = DistilBertForSequenceClassification.from_pretrained(MODEL_NAME)
-model.eval()
+tokenizer = None
+model = None
+
+
+def load_email_model():
+    global tokenizer, model
+
+    if tokenizer is None or model is None:
+        print("Loading email phishing model from Hugging Face...")
+        tokenizer = DistilBertTokenizerFast.from_pretrained(MODEL_NAME)
+        model = DistilBertForSequenceClassification.from_pretrained(MODEL_NAME)
+        model.eval()
+
+    return tokenizer, model
 
 
 def predict_email_phishing(text: str) -> dict:
+    tokenizer, model = load_email_model()
+
     inputs = tokenizer(
         text,
         return_tensors="pt",
@@ -28,7 +41,7 @@ def predict_email_phishing(text: str) -> dict:
     return {
         "label": label,
         "prediction": label,
-        "confidence": confidence,
+        "confidence": float(confidence),
         "model_available": True,
         "source": "huggingface",
     }
