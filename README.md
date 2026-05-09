@@ -1,4 +1,3 @@
-```
 # CyberGuard AI Advisor
 
 CyberGuard AI Advisor is a full-stack AI-powered cybersecurity assistant designed to help users detect phishing emails, analyze suspicious URLs, respond to security incidents, and receive defensive cybersecurity guidance in Arabic and English.
@@ -9,110 +8,132 @@ The project is built as a production-style AI system, not just a simple chatbot.
 
 ## Live Demo
 
-Frontend:  
+### Frontend
 https://cyber-guard-ai-advisor.vercel.app
 
-Backend API:  
+### Backend API
 https://cyberguard-ai-advisor-production.up.railway.app
 
-API Docs:  
+### API Documentation
 https://cyberguard-ai-advisor-production.up.railway.app/docs
 
 ---
 
-## Main Features
+# Main Features
 
 - Conversational cybersecurity assistant
 - Phishing email analysis
-- Suspicious URL risk analysis
+- Suspicious URL risk detection
 - Incident response guidance
+- Defensive cybersecurity recommendations
 - Arabic and English support
 - Rule-based security analysis
 - ML-based phishing email detection
-- ML-based URL risk detection
-- RAG pipeline using FAISS and sentence-transformers
-- OpenRouter LLM integration
+- ML-based URL risk classification
+- Retrieval-Augmented Generation (RAG)
 - PostgreSQL conversation memory
-- Chat history persistence
-- Safety layer against offensive cybersecurity misuse
+- Hugging Face model hosting
+- OpenRouter LLM integration
 - FastAPI backend
 - React + Vite frontend
-- Dockerized backend
-- Cloud deployment using Railway, Vercel, and Neon
-- Hugging Face model hosting
+- Dockerized deployment
+- Cloud deployment pipeline
 
 ---
 
 # System Architecture
 
-```text
-User
- |
- v
-React Frontend (Vercel)
- |
- v
-FastAPI Backend (Railway)
- |
- |-- Chat API
- |-- Email Analysis API
- |-- URL Analysis API
- |-- Password Safety API
- |-- Reports API
- |
- |-- Rule-Based Analyzers
- |-- ML Models
- |     |-- Email Phishing Model from Hugging Face
- |     |-- URL Risk Model from Hugging Face
- |
- |-- RAG Pipeline
- |     |-- Knowledge Base
- |     |-- Sentence Transformers
- |     |-- FAISS Vector Store
- |     |-- OpenRouter LLM
- |
- v
-PostgreSQL Database (Neon)
- |
- |-- Chat Sessions
- |-- Chat Messages
- |-- Security Events
- 
-```
+## Frontend Layer
+- React + Vite frontend
+- Hosted on Vercel
+- Modern chat-based cybersecurity UI
+- Axios communication with backend APIs
+
+---
+
+## Backend Layer
+- FastAPI backend hosted on Railway
+- REST API architecture
+- Modular service-based structure
+- Handles:
+  - Chat requests
+  - URL analysis
+  - Email phishing detection
+  - RAG responses
+  - Conversation memory
+
+---
+
+## AI & ML Layer
+
+### Rule-Based Analysis
+- URL heuristics
+- Security keyword detection
+- Risk scoring
+
+### Machine Learning Models
+- DistilBERT phishing email classifier
+- Scikit-learn URL risk classifier
+- Models hosted on Hugging Face Hub
+
+### RAG Pipeline
+- FAISS vector store
+- sentence-transformers embeddings
+- Cybersecurity knowledge base
+- OpenRouter LLM generation
+
+---
+
+## Database Layer
+- PostgreSQL database hosted on Neon
+- Stores:
+  - Chat sessions
+  - Chat messages
+  - Security events
+  - Conversation history
+
+---
+
+## Deployment Layer
+- Frontend deployed on Vercel
+- Backend deployed on Railway
+- Database hosted on Neon
+- ML models hosted on Hugging Face
 
 ---
 
 # Tech Stack
 
 ## Backend
+- Python
+- FastAPI
+- SQLAlchemy
+- Alembic
+- PostgreSQL
+- FAISS
+- sentence-transformers
+- Transformers
+- scikit-learn
+- Hugging Face Hub
+- OpenRouter API
+- Docker
 
-* Python
-* FastAPI
-* SQLAlchemy
-* Alembic
-* PostgreSQL
-* FAISS
-* sentence-transformers
-* Transformers
-* scikit-learn
-* Hugging Face Hub
-* OpenRouter API
-* Docker
+---
 
 ## Frontend
+- React
+- Vite
+- Axios
+- Lucide React
+- CSS
 
-* React
-* Vite
-* Axios
-* Lucide React
-* CSS
+---
 
-## Deployment
-
-* Railway for backend
-* Vercel for frontend
-* Neon PostgreSQL for database
-* Hugging Face Hub for ML model hosting
+## Deployment & Infrastructure
+- Railway
+- Vercel
+- Neon PostgreSQL
+- Hugging Face Hub
 
 ---
 
@@ -123,143 +144,102 @@ CyberGuard-AI-Advisor/
 │
 ├── backend/
 │   ├── app/
-│   │   ├── ai/
-│   │   │   └── rag_pipeline.py
-│   │   │
 │   │   ├── api/
-│   │   │   ├── router.py
-│   │   │   └── v1/
-│   │   │       ├── chat.py
-│   │   │       ├── email.py
-│   │   │       ├── password.py
-│   │   │       ├── reports.py
-│   │   │       └── url.py
-│   │   │
-│   │   ├── core/
-│   │   │   └── config.py
-│   │   │
-│   │   ├── db/
-│   │   │   ├── base.py
-│   │   │   └── session.py
-│   │   │
-│   │   ├── knowledge_base/
-│   │   │   └── cyber_kb.md
-│   │   │
-│   │   ├── ml/
-│   │   │   ├── email_classifier.py
-│   │   │   ├── url_classifier.py
-│   │   │   ├── url_feature_extractor.py
-│   │   │   ├── train_email_model.py
-│   │   │   └── train_url_model.py
-│   │   │
-│   │   ├── models/
-│   │   │   ├── chat.py
-│   │   │   └── security_event.py
-│   │   │
 │   │   ├── services/
-│   │   │   ├── chat_service.py
-│   │   │   ├── email_analyzer.py
-│   │   │   ├── memory_service.py
-│   │   │   ├── risk_service.py
-│   │   │   └── url_analyzer.py
-│   │   │
+│   │   ├── models/
+│   │   ├── ml/
+│   │   ├── db/
+│   │   ├── knowledge_base/
 │   │   └── main.py
 │   │
 │   ├── alembic/
-│   ├── Dockerfile
-│   ├── docker-compose.yml
-│   ├── alembic.ini
 │   ├── requirements.txt
-│   └── .env.example
+│   ├── Dockerfile
+│   └── alembic.ini
 │
 ├── frontend/
 │   ├── src/
-│   │   ├── App.jsx
-│   │   ├── App.css
-│   │   ├── index.css
-│   │   └── main.jsx
-│   │
 │   ├── package.json
 │   └── vite.config.js
 │
 ├── README.md
-├── LICENSE
 └── .gitignore
 ```
 
 ---
 
-# How the Chat Pipeline Works
+# Chat Processing Pipeline
 
 When a user sends a message:
 
-1. The React frontend sends the message to the FastAPI backend.
+1. The React frontend sends the request to the FastAPI backend.
 2. The backend creates or resumes a chat session.
-3. The user message is saved to PostgreSQL.
-4. The system checks the message type:
-
-   * URL analysis
-   * Email phishing analysis
-   * Incident response
-   * General cybersecurity question
-5. The correct pipeline is selected:
-
-   * Rule-based analyzer
-   * ML classifier
-   * RAG pipeline
-   * LLM response
-6. The assistant response is saved to PostgreSQL.
-7. The final response is returned to the frontend.
+3. The user message is stored in PostgreSQL.
+4. The backend detects the message type:
+   - Suspicious URL
+   - Phishing email
+   - General cybersecurity question
+   - Incident response request
+5. The correct processing pipeline is selected:
+   - Rule-based analysis
+   - Machine learning classification
+   - RAG retrieval
+   - LLM generation
+6. The assistant response is generated.
+7. The response is stored in PostgreSQL.
+8. The final answer is returned to the frontend.
 
 ---
 
 # Machine Learning Models
 
-## Email Phishing Model
+## Email Phishing Detection
 
-The email phishing detector is based on a fine-tuned DistilBERT model.
+The phishing email detector is based on a fine-tuned DistilBERT model.
 
-The trained model is hosted on Hugging Face Hub:
+Hosted on Hugging Face Hub:
 
 ```text
 rawankhaled46/cyberguard-email-phishing-model
 ```
 
-This allows the backend to load the model directly during deployment without storing large model files inside the GitHub repository.
+The backend dynamically downloads the model during deployment instead of storing large model files in GitHub.
 
-## URL Risk Model
+---
 
-The URL risk detector is a scikit-learn model saved as a `.pkl` file and hosted on Hugging Face Hub:
+## URL Risk Detection
+
+The suspicious URL detector uses a scikit-learn classification model.
+
+Hosted on Hugging Face Hub:
 
 ```text
 rawankhaled46/cyberguard-url-model
 ```
 
-The model is downloaded at runtime using `huggingface_hub`.
+The model is downloaded dynamically using `huggingface_hub`.
 
 ---
 
-# RAG Pipeline
+# Retrieval-Augmented Generation (RAG)
 
-CyberGuard uses Retrieval-Augmented Generation to answer cybersecurity questions using a curated knowledge base.
+CyberGuard uses RAG to answer cybersecurity questions using a curated cybersecurity knowledge base.
 
-The RAG flow:
+## RAG Flow
 
-```text
-User Question
-   ↓
-Text Embedding
-   ↓
-FAISS Similarity Search
-   ↓
-Relevant Cybersecurity Context
-   ↓
-OpenRouter LLM
-   ↓
-Final Defensive Security Answer
-```
+1. User question
+2. Text embedding generation
+3. FAISS similarity search
+4. Retrieve relevant cybersecurity context
+5. OpenRouter LLM response generation
+6. Final defensive cybersecurity answer
 
-The knowledge base contains defensive cybersecurity content, incident response steps, phishing awareness, password safety, suspicious URL guidance, and security best practices.
+The knowledge base includes:
+- Phishing awareness
+- Password safety
+- Suspicious URL guidance
+- Incident response recommendations
+- Defensive cybersecurity best practices
 
 ---
 
@@ -268,25 +248,26 @@ The knowledge base contains defensive cybersecurity content, incident response s
 CyberGuard includes a safety layer to prevent offensive cybersecurity misuse.
 
 The assistant refuses requests related to:
+- Malware creation
+- Credential theft
+- Exploit development
+- Hacking instructions
+- Phishing kit generation
+- Security bypass techniques
 
-* Hacking instructions
-* Password stealing
-* Malware creation
-* Exploit development
-* Phishing kits
-* Bypassing security systems
-
-Instead, it redirects the user toward defensive guidance, prevention, detection, and safe security practices.
+Instead, the assistant redirects users toward defensive and ethical cybersecurity practices.
 
 ---
 
 # Environment Variables
 
-Create a `.env` file inside the `backend` directory:
+Create a `.env` file inside the backend directory:
 
 ```env
 DATABASE_URL=postgresql://username:password@host/database?sslmode=require
+
 OPENROUTER_API_KEY=your_openrouter_api_key
+
 OPENROUTER_MODEL=meta-llama/llama-3.1-8b-instruct
 ```
 
@@ -302,13 +283,13 @@ Go to the backend directory:
 cd backend
 ```
 
-Create and activate a virtual environment:
+Create a virtual environment:
 
 ```bash
 python -m venv venv
 ```
 
-On Windows:
+Activate the environment on Windows:
 
 ```bash
 venv\Scripts\activate
@@ -326,7 +307,7 @@ Run database migrations:
 alembic upgrade head
 ```
 
-Start the backend:
+Start the FastAPI backend:
 
 ```bash
 uvicorn app.main:app --reload
@@ -338,7 +319,7 @@ Backend will run at:
 http://127.0.0.1:8000
 ```
 
-Swagger docs:
+Swagger documentation:
 
 ```text
 http://127.0.0.1:8000/docs
@@ -360,7 +341,7 @@ Install dependencies:
 npm install
 ```
 
-Start the frontend:
+Run the frontend:
 
 ```bash
 npm run dev
@@ -376,13 +357,13 @@ http://localhost:5173
 
 # Running with Docker
 
-From the backend directory:
+Build the backend image:
 
 ```bash
 docker build -t cyberguard-backend .
 ```
 
-Run the container:
+Run the backend container:
 
 ```bash
 docker run -p 8000:8000 --env-file .env cyberguard-backend
@@ -392,9 +373,9 @@ docker run -p 8000:8000 --env-file .env cyberguard-backend
 
 # Database Migrations
 
-Alembic is used for managing database schema changes.
+Alembic is used for database schema management.
 
-Create a new migration:
+Create a migration:
 
 ```bash
 alembic revision --autogenerate -m "migration message"
@@ -406,45 +387,51 @@ Apply migrations:
 alembic upgrade head
 ```
 
-In production, migrations are executed before starting the backend container.
+Production deployments automatically run migrations before starting the backend service.
 
 ---
 
 # Deployment
 
 ## Backend
+- Hosted on Railway
+- Dockerized FastAPI deployment
+- Automatic PostgreSQL migrations during startup
 
-The backend is deployed on Railway using Docker.
-
-Railway runs:
+Startup command:
 
 ```bash
 alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port 8000
 ```
 
-## Database
-
-PostgreSQL is hosted on Neon.
+---
 
 ## Frontend
+- Hosted on Vercel
+- React + Vite deployment
 
-The React frontend is deployed on Vercel.
+---
 
-## Models
+## Database
+- PostgreSQL hosted on Neon
 
-ML models are hosted on Hugging Face Hub.
+---
+
+## ML Models
+- Hosted on Hugging Face Hub
+- Dynamically downloaded during deployment
 
 ---
 
 # API Endpoints
 
-## Chat
+## Chat Endpoint
 
 ```http
 POST /chat/
 ```
 
-Request:
+Example request:
 
 ```json
 {
@@ -452,23 +439,7 @@ Request:
 }
 ```
 
-Response:
-
-```json
-{
-  "session_id": "session-id",
-  "response": {
-    "type": "rag_cyber_advice",
-    "answer": "..."
-  }
-}
-```
-
-## Get Chat History
-
-```http
-GET /chat/{session_id}
-```
+---
 
 ## URL Analysis
 
@@ -476,13 +447,17 @@ GET /chat/{session_id}
 POST /url/analyze
 ```
 
+---
+
 ## Email Analysis
 
 ```http
 POST /email/analyze
 ```
 
-## Password Check
+---
+
+## Password Analysis
 
 ```http
 POST /password/check
@@ -493,68 +468,70 @@ POST /password/check
 # Engineering Decisions
 
 ## Why PostgreSQL instead of SQLite?
+PostgreSQL was selected because the project requires persistent conversation memory, production-style deployment, scalability, and reliable schema migrations.
 
-PostgreSQL was chosen because the project needs persistent conversation history, production-style deployment, reliable schema migrations, and scalability.
+---
 
 ## Why Docker?
+Docker ensures consistent backend execution across local development and cloud deployment environments.
 
-Docker ensures the backend runs consistently across local development and cloud deployment.
+---
 
-## Why Railway for backend?
+## Why Railway?
+Railway supports Dockerized FastAPI applications and provides simple backend deployment workflows.
 
-Railway supports Docker-based FastAPI deployment and is suitable for backend services that require long-running APIs.
+---
 
-## Why Vercel for frontend?
+## Why Vercel?
+Vercel is optimized for React frontend hosting and CDN-based delivery.
 
-Vercel is optimized for React/Vite frontend deployment and provides fast CDN-based hosting.
+---
 
 ## Why Neon?
+Neon provides managed PostgreSQL with SSL support and easy cloud integration.
 
-Neon provides managed PostgreSQL with a free tier, SSL support, and easy integration with cloud backends.
+---
 
 ## Why Hugging Face Hub?
-
-Hugging Face Hub acts as a model registry. It keeps large ML artifacts outside the code repository and allows models to be loaded dynamically during deployment.
+Hugging Face Hub acts as a model registry for storing and loading ML models dynamically during deployment.
 
 ---
 
 # Current Limitations
 
-* Authentication is not implemented yet.
-* Rate limiting is planned but not yet enabled.
-* Some ML models may need further evaluation before production use.
-* The system is focused on defensive cybersecurity guidance only.
-* The chatbot should not be used as a replacement for professional incident response.
+- Authentication is not implemented yet
+- Rate limiting is planned
+- ML models may require additional evaluation
+- The system focuses only on defensive cybersecurity
+- The assistant should not replace professional incident response teams
 
 ---
 
 # Future Improvements
 
-* User authentication
-* User-specific chat history
-* Security report export
-* File upload for email analysis
-* Better observability and logging
-* Rate limiting
-* Admin dashboard
-* More advanced incident reports
-* Model monitoring
-* CI/CD testing pipeline
-* Improved Arabic cybersecurity knowledge base
-* Dedicated ML inference service
+- User authentication
+- User-specific memory
+- Security report export
+- File upload for phishing email analysis
+- Better logging and observability
+- Admin dashboard
+- CI/CD testing pipeline
+- Advanced Arabic cybersecurity knowledge base
+- Dedicated ML inference service
+- Improved model monitoring
 
 ---
 
-# Status
+# Current Status
 
-CyberGuard AI Advisor is currently deployed as a working full-stack AI cybersecurity assistant with:
+CyberGuard AI Advisor is currently deployed as a live production-style AI cybersecurity assistant with:
 
-* Live React frontend
-* Live FastAPI backend
-* PostgreSQL conversation memory
-* RAG-based cybersecurity responses
-* Hugging Face-hosted ML models
-* Cloud deployment pipeline
+- React frontend
+- FastAPI backend
+- PostgreSQL memory system
+- RAG-based cybersecurity responses
+- Hugging Face-hosted ML models
+- Cloud deployment pipeline
 
 ---
 
@@ -563,7 +540,4 @@ CyberGuard AI Advisor is currently deployed as a working full-stack AI cybersecu
 Developed by Rawan Khaled.
 
 GitHub:
-[https://github.com/Rawan-khaled-AI](https://github.com/Rawan-khaled-AI)
-
-```
-```
+https://github.com/Rawan-khaled-AI
